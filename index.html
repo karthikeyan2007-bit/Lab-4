@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Country Capitals</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="intro">
+    <svg class="intro__logo" viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <ellipse cx="12" cy="12" rx="4.2" ry="10" fill="none" stroke="currentColor" stroke-width="1.6"/>
+      <path d="M2.5 9h19M2.5 15h19" fill="none" stroke="currentColor" stroke-width="1.6"/>
+    </svg>
+    <p class="intro__eyebrow">World Explorer</p>
+    <h1 class="intro__title">Capitals. <span>At a glance.</span></h1>
+    <p class="intro__subtitle">Choose a country and discover its capital city instantly.</p>
+  </header>
+
+  <main class="card" id="card">
+    <div class="picker">
+      <label for="country" class="picker__label">Country</label>
+      <select id="country" class="picker__select" onchange="showCapital()">
+        <option value="">Select a country</option>
+        <option value="in">India</option>
+        <option value="jp">Japan</option>
+        <option value="fr">France</option>
+        <option value="au">Australia</option>
+        <option value="br">Brazil</option>
+      </select>
+    </div>
+
+    <div class="result">
+      <div class="result__flag" id="flagBox">
+        <img id="flag" alt="" hidden>
+        <svg id="flagPlaceholder" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M5 21V4M5 4h11l-2 4 2 4H5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="result__text">
+        <span class="picker__label">Capital</span>
+        <p id="capital" class="capital capital--empty">Waiting for your choice</p>
+        <p id="country-name" class="result__country"></p>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">Lab 4 &middot; HTML &amp; CSS</footer>
+
+  <script>
+    var countries = {
+      in: { name: "India",     capital: "New Delhi", color: "#ff7a00" },
+      jp: { name: "Japan",     capital: "Tokyo",     color: "#bc002d" },
+      fr: { name: "France",    capital: "Paris",     color: "#0055a4" },
+      au: { name: "Australia", capital: "Canberra",  color: "#00843d" },
+      br: { name: "Brazil",    capital: "Brasília",  color: "#009c3b" }
+    };
+
+    function showCapital() {
+      var code = document.getElementById("country").value;
+      var card = document.getElementById("card");
+      var capital = document.getElementById("capital");
+      var countryName = document.getElementById("country-name");
+      var flag = document.getElementById("flag");
+      var placeholder = document.getElementById("flagPlaceholder");
+
+      if (code === "") {
+        capital.textContent = "Waiting for your choice";
+        capital.className = "capital capital--empty";
+        countryName.textContent = "";
+        flag.hidden = true;
+        placeholder.style.display = "";
+        card.style.removeProperty("--country");
+        return;
+      }
+
+      var c = countries[code];
+      card.style.setProperty("--country", c.color);
+
+      flag.src = "https://flagcdn.com/w160/" + code + ".png";
+      flag.alt = "Flag of " + c.name;
+      flag.hidden = false;
+      placeholder.style.display = "none";
+
+      capital.textContent = c.capital;
+      countryName.textContent = "Capital of " + c.name;
+
+      // Re-trigger the entrance animation on every change
+      capital.className = "capital";
+      void capital.offsetWidth;
+      capital.className = "capital capital--show";
+    }
+  </script>
+
+</body>
+</html>
